@@ -1,5 +1,6 @@
 
-Subnetting
+	- Subnetting -
+
 
 sayd@Thinker ~ % ifconfig
 enp0s31f6: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
@@ -100,7 +101,7 @@ to create 4 networks, (4 on the second line), we will need 2 host bits
 to create 17 networks, (32, as 16 is to small) we will need 5 host bits
 
 
-[network bits]             [host bits]
+[network bits            ] [host bits]
 11111111.11111111.11111111.00000000
 
 (equivalent to 255.255.255.0)
@@ -170,4 +171,10 @@ so size and ranges of networks:
 all the networks will have a subnet mask of 255.255.255.224
 
 host number available ((2^5) - 2) = 30
+
+(to verify..)
+
+...
+
+
 

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 15:17:48 by cdumais           #+#    #+#              #
-#    Updated: 2024/01/29 16:30:06 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/04 22:21:32 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,12 @@ OS			:=	$(shell uname)
 NPD			:=	--no-print-directory
 
 all:
-
-	@echo "'make pdf' \t-> get a $(NAME) instruction pdf in './$(TMP_DIR)/'"
-	@echo "'make update' \t-> pull the github version"
+	@echo "'make ref' \t-> Open $(NAME) tutorial from $(UNDERLINE)(student)$(RESET)'s github repo"
+	@echo "'make video' \t-> Open youtube tutorial on subnetting by $(UNDERLINE)(...)$(RESET)"
+	@echo "'make train' \t-> Launch 42's $(BOLD)$(NAME)$(RESET)"
+	@echo "'make pdf' \t-> Get a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)"
+	@echo "'make update' \t-> Pull the github version"
+	@echo "'make clean' \t-> Remove $(CYAN)$(TMP_DIR)$(RESET) folder"
 
 $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
@@ -88,20 +91,27 @@ train: | $(TMP_DIR)
 	@cd $(TMP_DIR) && python3 -m http.server $(PORT) &
 	@sleep 2 # Wait for the server to start
 	@echo "Opening in Google Chrome..."
-	@open -a "Google Chrome" $(URL) \
-	|| google-chrome $(URL) \
-	|| echo "Failed to open Google Chrome. Please open $(URL) manually."
+ifeq ($(OS),Darwin)
+	@open -a "Google Chrome" $(URL)
+else
+	@xdg-open $(URL) || echo "Could not open Google Chrome. Please open $(URL) manually..."
+endif
+
+.PHONY: train
 # **************************************************************************** #
 
 # **************************************************************************** #
-REF_URL		:=	https://github.com/lpaube/NetPractice
+REF_URL1	:=	https://github.com/lpaube/NetPractice
+REF_URL2	:=	https://github.com/DeRuina/NetPractice
 VIDEO_URL	:=	https://www.youtube.com/watch?v=5WfiTHiU4x8&list=WL&index=1&t=1s
 
 ref:
 	@if [ "$(OS)" = "Darwin" ]; then \
-		open -a "Google Chrome" $(REF_URL); \
+		open -a "Google Chrome" $(REF_URL1); \
+		open -a "Google Chrome" $(REF_URL2); \
 	else \
-		xdg-open $(REF_URL) || echo "Please install a compatible PDF viewer"; \
+		xdg-open $(REF_URL1) || echo "Please install a compatible PDF viewer"; \
+		xdg-open $(REF_URL2) || echo "Please install a compatible PDF viewer"; \
 	fi
 
 video:
