@@ -6,10 +6,10 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 15:17:48 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/04 22:21:32 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/05 14:33:20 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-#https://medium.com/@imyzf/netpractice-2d2b39b6cf0a
+
 NAME		:=	NetPractice
 INC_DIR		:=	inc
 SRC_DIR		:=	src
@@ -19,7 +19,7 @@ OS			:=	$(shell uname)
 NPD			:=	--no-print-directory
 
 all:
-	@echo "'make ref' \t-> Open $(NAME) tutorial from $(UNDERLINE)(student)$(RESET)'s github repo"
+	@echo "'make ref' \t-> Open $(NAME) tutorials from $(UNDERLINE)(...)$(RESET)"
 	@echo "'make video' \t-> Open youtube tutorial on subnetting by $(UNDERLINE)(...)$(RESET)"
 	@echo "'make train' \t-> Launch 42's $(BOLD)$(NAME)$(RESET)"
 	@echo "'make pdf' \t-> Get a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)"
@@ -103,15 +103,19 @@ endif
 # **************************************************************************** #
 REF_URL1	:=	https://github.com/lpaube/NetPractice
 REF_URL2	:=	https://github.com/DeRuina/NetPractice
+REF_URL3	:=	https://medium.com/@imyzf/netpractice-2d2b39b6cf0a
+
 VIDEO_URL	:=	https://www.youtube.com/watch?v=5WfiTHiU4x8&list=WL&index=1&t=1s
 
 ref:
 	@if [ "$(OS)" = "Darwin" ]; then \
 		open -a "Google Chrome" $(REF_URL1); \
 		open -a "Google Chrome" $(REF_URL2); \
+		open -a "Google Chrome" $(REF_URL3); \
 	else \
 		xdg-open $(REF_URL1) || echo "Please install a compatible PDF viewer"; \
 		xdg-open $(REF_URL2) || echo "Please install a compatible PDF viewer"; \
+		xdg-open $(REF_URL3) || echo "Please install a compatible PDF viewer"; \
 	fi
 
 video:

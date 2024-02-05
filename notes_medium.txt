@@ -1,0 +1,126 @@
+
+
+
+IP (Internet Protocol Address)
+	set of rules for communication over the internet
+
+an IP address identifies a network or a device
+
+two parts:
+
+	The Network ID
+
+	The Host ID
+
+two types:
+
+	Static IP address:
+		stays permanent, does not change
+		used for important equipement (businesses, servers...)
+	
+	Dynamic IP address:
+		changes occasionally,
+		used for consumer equipement (lapptop, smartphone, tablet...)
+
+
+Purpose of the IP address
+
+	handle the connection between devices
+	that send and recieve data all across the network
+
+	uniquely identifies every device on the internet
+	(no way to contact them without an address)
+
+	allows computing devices to communicate with destinations
+	(websites, streaming services, ...)
+	and let websites know who is connecting
+
+IPv4 and IPv6
+
+	v4: 1991
+		32-bits addess
+		over 4.3 billion addresses
+		IP addresses must be reused and masked
+		uses Numeric Dot-Decimal Notation
+		(ex: 192.108.42.64)
+		must be configured manually
+	
+	v6: 1998
+		128-bits address
+		over 340 undecillion addresses (36 zeros)
+		every device can have it's unique IP address
+		uses Alphanumeric Hexadecimal Notation
+		(ex: 2002:0de6:0001:0042:0100:8c2e:0370:7234)
+		supports auto-configuration
+
+
+TCP/IP
+(Transmission Control Protocol/Internet Protocol)
+
+	set of rules that guide and allow computers
+	to communicate on the internet
+
+	IP: obtains the address which the data is sent to
+
+	TCP: responsible for data delivery once that address has been found
+
+
+	TCP/IP divides the deifferent communication tasks into layers,
+	each layers has a different function
+
+	Data goes through 4 individual layers
+	before it is recieved on the other end
+
+	TCP/IP then goes through these layers in reverse to
+	reassemble the data and represent it to its reciever
+
+	4 layers of the TCP/IP model:
+
+		Datalink Layer:
+			also called physical layer
+			handles the physical parts of sending and recieving data
+			using the Ethernet, or WiFi, etc...
+
+		Internet Layer:
+			also called network layer
+			controls the movement of the packets
+			around the internet
+
+		Transport Layer:
+			provides reliable data connection between 2 devices
+			divides the data into packets,
+			knows the packets that are recieved from the other devices
+			makes sure the other device knows the packets it recieves
+
+		Application Layer:
+			the group of applications that requires a network connection
+			typically what the user interacts with
+			(emails, messaging, etc)
+			because the lower layer handles the details of communication,
+			no need for applications to concern themselves with it
+
+
+Switch
+
+	device that connects devices within the same network
+	usually a LAN network (a Local Area Network)
+	forwards data packets to and from those devices.
+
+	unlike a router, a switch only sends the data
+	to the devices it is intended for
+	(may be another switch, a router, or a user's computer)
+
+
+Router
+
+	device that connects two or more packet-switched networks
+	or subnetworks
+
+	manages the traffic between these networks by
+	forwarding data packets to their intended IP addresses
+	
+	allows multiple devices to use the same internet connection
+
+
+
+
