@@ -9,7 +9,7 @@
 #    Updated: 2024/02/04 22:21:32 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
+#https://medium.com/@imyzf/netpractice-2d2b39b6cf0a
 NAME		:=	NetPractice
 INC_DIR		:=	inc
 SRC_DIR		:=	src
