@@ -6,9 +6,11 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 15:17:48 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/05 14:33:20 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/05 18:28:05 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+.PHONY: all clean fclean ffclean update pdf net ref video man
 
 NAME		:=	NetPractice
 INC_DIR		:=	inc
@@ -18,13 +20,7 @@ REMOVE		:=	rm -rf
 OS			:=	$(shell uname)
 NPD			:=	--no-print-directory
 
-all:
-	@echo "'make ref' \t-> Open $(NAME) tutorials from $(UNDERLINE)(...)$(RESET)"
-	@echo "'make video' \t-> Open youtube tutorial on subnetting by $(UNDERLINE)(...)$(RESET)"
-	@echo "'make train' \t-> Launch 42's $(BOLD)$(NAME)$(RESET)"
-	@echo "'make pdf' \t-> Get a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)"
-	@echo "'make update' \t-> Pull the github version"
-	@echo "'make clean' \t-> Remove $(CYAN)$(TMP_DIR)$(RESET) folder"
+all: man
 
 $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
@@ -39,7 +35,6 @@ clean fclean ffclean:
 		$(YELLOW)Nothing to remove$(RESET)"; \
 	fi
 
-.PHONY: all clean fclean ffclean
 # **************************************************************************** #
 # ----------------------------------- GIT ------------------------------------ #
 # **************************************************************************** #
@@ -57,7 +52,6 @@ update:
 		echo "canceling update..."; \
 	fi
 
-.PHONY: update
 # **************************************************************************** #
 # ---------------------------------- PDF ------------------------------------- #
 # **************************************************************************** #
@@ -70,19 +64,18 @@ pdf: | $(TMP_DIR)
 ifeq ($(OS),Darwin)
 	@open $(TMP_DIR)/$(PDF)
 else
-	@xdg-open $(TMP_DIR)/$(PDF) || echo "Please install a compatible PDF viewer"
+	@xdg-open $(TMP_DIR)/$(PDF)
 endif
 
-.PHONY: pdf
 # **************************************************************************** #
-# --------------------------------- TRAIN ------------------------------------ #
+# ---------------------------------- NET ------------------------------------- #
 # **************************************************************************** #
 TRAIN		:= net_practice.1.5.tgz
 TRAIN_URL	:= $(GIT_URL)/raw/main/downloads/$(TRAIN)
 PORT		:= 8000
 URL			:= http://localhost:$(PORT)/net_practice/
 
-train: | $(TMP_DIR)
+net: | $(TMP_DIR)
 	@echo "Downloading and setting up training material..."
 	@curl -L $(TRAIN_URL) -o $(TMP_DIR)/$(TRAIN)
 	@echo "Extracting tarball..."
@@ -96,16 +89,12 @@ ifeq ($(OS),Darwin)
 else
 	@xdg-open $(URL) || echo "Could not open Google Chrome. Please open $(URL) manually..."
 endif
-
-.PHONY: train
 # **************************************************************************** #
-
+# ---------------------------------- REF ------------------------------------- #
 # **************************************************************************** #
 REF_URL1	:=	https://github.com/lpaube/NetPractice
 REF_URL2	:=	https://github.com/DeRuina/NetPractice
 REF_URL3	:=	https://medium.com/@imyzf/netpractice-2d2b39b6cf0a
-
-VIDEO_URL	:=	https://www.youtube.com/watch?v=5WfiTHiU4x8&list=WL&index=1&t=1s
 
 ref:
 	@if [ "$(OS)" = "Darwin" ]; then \
@@ -113,19 +102,65 @@ ref:
 		open -a "Google Chrome" $(REF_URL2); \
 		open -a "Google Chrome" $(REF_URL3); \
 	else \
-		xdg-open $(REF_URL1) || echo "Please install a compatible PDF viewer"; \
-		xdg-open $(REF_URL2) || echo "Please install a compatible PDF viewer"; \
-		xdg-open $(REF_URL3) || echo "Please install a compatible PDF viewer"; \
+		xdg-open $(REF_URL1); \
+		xdg-open $(REF_URL2); \
+		xdg-open $(REF_URL3); \
 	fi
+
+# video:
+# 	@if [ "$(OS)" = "Darwin" ]; then \
+# 		open -a "Google Chrome"  $(VIDEO_URL); \
+# 	else \
+# 		xdg-open $(VIDEO_URL); \
+# 	fi
+
+# # or
+
+# ifeq ($(OS),Darwin)
+# 	@open $(VIDEO_URL)
+# else ifeq ($(OS),Linux)
+# 	@xdg-open $(VIDEO_URL)
+# else
+# 	$(error Unsupported operating system: $(OS))
+# endif
+
+# # or
+
+OPENER		:=
+VIDEO_URL	:=	https://www.youtube.com/watch?v=5WfiTHiU4x8&list=WL&index=1&t=1s
+
+ifeq ($(OS),Darwin)
+	OPENER := open -a "Google Chrome"
+else
+	OPENER := xdg-open
+endif
 
 video:
-	@if [ "$(OS)" = "Darwin" ]; then \
-		open -a "Google Chrome"  $(VIDEO_URL); \
-	else \
-		xdg-open $(VIDEO_URL) || echo "Please install a compatible PDF viewer"; \
-	fi
+	@echo "Launching Youtube tutorial on Subnetting"
+	@$(OPENER) $(VIDEO_URL)
 
-.PHONY: ref video
+# **************************************************************************** #
+
+man:
+	@echo "$$man"
+
+define man
+
+'make ref' \t-> Open $(NAME) tutorials from $(UNDERLINE)NetworkChuck$(RESET)
+'make video' \t-> Open youtube tutorial on subnetting by $(UNDERLINE)(...)$(RESET)
+'make net' \t-> Launch 42's $(BOLD)$(NAME)$(RESET)
+'make pdf' \t-> Get a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)
+'make update' \t-> Pull the github version"
+'make clean' \t-> Remove $(CYAN)$(TMP_DIR)$(RESET) folder
+(also works with fclean or ffclean)
+
+'make man' \t-> Show this message
+
+endef
+
+export man
+
+
 # **************************************************************************** #
 ESC			:= \033
 

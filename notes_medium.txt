@@ -120,6 +120,133 @@ Router
 	forwarding data packets to their intended IP addresses
 	
 	allows multiple devices to use the same internet connection
+	
+	directs and guides sent packets to their destination (IP address)
+	to send the packets as efficiently as possible,
+	a router uses an internal routing table
+	(a list of paths to various network destination)
+
+	a router reads a packet header to determine where it is heading
+	then consults with the routing table to decide
+	which path is the most efficient for the packet to reach its destination
+
+
+Modem and Router
+
+	Router:
+		forms networks
+		manages the flow of data within and between those networks
+	
+	Modem:
+		connects those networks to the internet
+	
+	a router only connects the devices with each other to make a LAN
+	between them all, but with no access to the internet
+
+	a modem can connect to one device only, but provide access to the internet
+
+
+Loopback address
+
+	built into the IP domain system
+	to allow for a device to send and recieve its own data packets
+
+	it is a distinct reserved IP address range
+	starts from
+		127.0.0.0
+	and ends at
+		127.255.255.255
+	is used for various kind of analysis
+	(testing purposes and debugging)
+
+
+Subnet
+
+	network inside a network, makes networks more efficient
+
+Subnetting
+
+	process of stealing bits from the HOST part
+	of the IP address to divide the large network into smaller ones (subnets)
+
+	after subnetting, we end up with NETWORK SUBNET HOST fields,
+	and we always reserve an IP address to identify the subnet
+	and another to identify the broadcast subnet address
+
+	through subnetting, network traffic can travel shorter distance
+	without passing through unnecessary routes to reach its destination
+
+
+Calculate a subnet mask from IP address steps
+
+using IP address: 10.20.4.13/29
+
+
+Step 1: Find Subnet Number
+
+	Subtract prefix number from /32
+	32 - 29 = 3
+
+	Calculate Subnet Mask:
+	8 bits - 3 bits = 5 bits (Network bits turned on)
+
+	|-------|-------|-------|-------|-------|-------|-------|-------|
+	| 128   | 64    | 32    | 16    | 8     | 4     | 2     | 1     |
+	|-------|-------|-------|-------|-------|-------|-------|-------|
+	| 1     | 1     | 1     | 1     | 1     | 0     | 0     | 0     |
+	|-------|-------|-------|-------|-------|-------|-------|-------|
+	| 128 + | 64 +  | 32 +  | 16 +  | 8     | =     248             |
+	|-------|-------|-------|-------|-------|-------|-------|-------|
+
+	Subnet Mask = 255.255.255.248
+
+
+Step 2: Find Subnet Size
+
+	Raise 2 to the power of deducation (8 - 3 = 5) -> Let's called it n.
+
+	2 ** n    = Subnet Size.
+	2 ** 3    = Subnet Sizes for each subnet.
+	2 * 2 * 2 = 8
+
+	NOTE: 8 is the block size for the subnet, so for example:
+	the increments will now be 0 8 16 24 32 and so on (we add 8 each time)
+
+
+Step 3: Find Broadcast Address
+
+	Subnet size - 1
+	(2 ** n) - 1 = Broadcast Address
+	(2 ** 3) - 1 = (8 - 1) = 7
+
+
+Step 4: Locate IP Address Subnet:
+
+	Identify subnet block for IP address:
+	-> Where in each increment
+	is the address 10.20.4.13/29 located (0 8 16 32 40)?
+
+	13 falls between 8 and 16 and therefore
+	the address is in the valid host range of the subnet 10.20.4.8/29
+
+Step 5: Calculate The Valid Hosts
+
+	Subnet size - 2
+	(2 ** n) - 2 = Valid Host Range
+	(2 ** 3) - 2 = (8 - 2) = 6
+
+And from these steps, we found 4 important things:
+
+	Subnet Address    -> 10.20.4.8/29
+	Min Host Address  -> 10.20.4.9/29
+	Max Host Address  -> 10.20.4.14/29
+	Broadcast Address -> 10.20.4.15/29
+
+
+Command line utility to understand Address Manipulations better:
+
+	brew install ipcalc
+
 
 
 
