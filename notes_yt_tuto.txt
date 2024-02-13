@@ -36,8 +36,8 @@ wlp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 255.255.255.0	subnet
 
 Network portion	(192.168.1)
-host			(204)
-	devices are hosts*
+host		(204)
+(devices are hosts)
 
 the default gateway is the router
 

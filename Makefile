@@ -6,11 +6,11 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 15:17:48 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/05 18:28:05 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/13 12:36:41 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: all clean fclean ffclean update pdf net ref video man
+.PHONY: all clean fclean ffclean update pdf net ref video man ipcalc
 
 NAME		:=	NetPractice
 INC_DIR		:=	inc
@@ -34,7 +34,6 @@ clean fclean ffclean:
 		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
 		$(YELLOW)Nothing to remove$(RESET)"; \
 	fi
-
 # **************************************************************************** #
 # ----------------------------------- GIT ------------------------------------ #
 # **************************************************************************** #
@@ -51,7 +50,6 @@ update:
 	else \
 		echo "canceling update..."; \
 	fi
-
 # **************************************************************************** #
 # ---------------------------------- PDF ------------------------------------- #
 # **************************************************************************** #
@@ -66,10 +64,11 @@ ifeq ($(OS),Darwin)
 else
 	@xdg-open $(TMP_DIR)/$(PDF)
 endif
-
 # **************************************************************************** #
 # ---------------------------------- NET ------------------------------------- #
 # **************************************************************************** #
+# TODO:add a choose case for level choice
+
 TRAIN		:= net_practice.1.5.tgz
 TRAIN_URL	:= $(GIT_URL)/raw/main/downloads/$(TRAIN)
 PORT		:= 8000
@@ -84,16 +83,17 @@ net: | $(TMP_DIR)
 	@cd $(TMP_DIR) && python3 -m http.server $(PORT) &
 	@sleep 2 # Wait for the server to start
 	@echo "Opening in Google Chrome..."
+	@echo "(wip) To change level, do it manually in the url.. for now..."
 ifeq ($(OS),Darwin)
 	@open -a "Google Chrome" $(URL)
 else
-	@xdg-open $(URL) || echo "Could not open Google Chrome. Please open $(URL) manually..."
+	@xdg-open $(URL)
 endif
 # **************************************************************************** #
 # ---------------------------------- REF ------------------------------------- #
 # **************************************************************************** #
-REF_URL1	:=	https://github.com/lpaube/NetPractice
-REF_URL2	:=	https://github.com/DeRuina/NetPractice
+REF_URL1	:=	https://github.com/lpaube/NetPractice #has explained answers
+REF_URL2	:=	https://github.com/DeRuina/NetPractice #has cheetsheets
 REF_URL3	:=	https://medium.com/@imyzf/netpractice-2d2b39b6cf0a
 
 ref:
@@ -107,25 +107,7 @@ ref:
 		xdg-open $(REF_URL3); \
 	fi
 
-# video:
-# 	@if [ "$(OS)" = "Darwin" ]; then \
-# 		open -a "Google Chrome"  $(VIDEO_URL); \
-# 	else \
-# 		xdg-open $(VIDEO_URL); \
-# 	fi
-
-# # or
-
-# ifeq ($(OS),Darwin)
-# 	@open $(VIDEO_URL)
-# else ifeq ($(OS),Linux)
-# 	@xdg-open $(VIDEO_URL)
-# else
-# 	$(error Unsupported operating system: $(OS))
-# endif
-
-# # or
-
+# **************************************************************************** #
 OPENER		:=
 VIDEO_URL	:=	https://www.youtube.com/watch?v=5WfiTHiU4x8&list=WL&index=1&t=1s
 
@@ -140,14 +122,13 @@ video:
 	@$(OPENER) $(VIDEO_URL)
 
 # **************************************************************************** #
-
 man:
 	@echo "$$man"
 
 define man
 
-'make ref' \t-> Open $(NAME) tutorials from $(UNDERLINE)NetworkChuck$(RESET)
-'make video' \t-> Open youtube tutorial on subnetting by $(UNDERLINE)(...)$(RESET)
+'make ref' \t-> Open $(NAME) tutorials from $(UNDERLINE)(...)$(RESET)
+'make video' \t-> Open youtube tutorial on subnetting by $(UNDERLINE)NetworkChuck$(RESET)
 'make net' \t-> Launch 42's $(BOLD)$(NAME)$(RESET)
 'make pdf' \t-> Get a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)
 'make update' \t-> Pull the github version"
@@ -159,8 +140,6 @@ define man
 endef
 
 export man
-
-
 # **************************************************************************** #
 ESC			:= \033
 

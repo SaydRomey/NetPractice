@@ -1,0 +1,328 @@
+
+# **************************************************************************** #
+lvl1
+# **************************************************************************** #
+Goal 1)
+host 'my PC' needs to communicate with host 'my little brother's computer'
+
+host A: my PC
+interface A1)
+	IP:		?(1)
+	MASK:	255.255.255.0
+
+host B: my little brother's computer
+interface B1)
+	IP:		104.98.23.12
+	MASK:	255.255.255.0
+
+# **************************************************************************** #
+/*
+(1)
+Since Client A and Client B are on the same network,
+their IP address must represent the same network
+in accordance with the subnet mask.
+The subnet mask is 255.255.255.0,
+which means that the first 3 bytes of the IP address represent the network,
+and the 4th byte represents the host.
+Since we are on the same network, only the host can change.
+The solution will be
+anything in the range of
+104.96.23.0 - 104.96.23.255
+excluding the following 3:
+
+104.96.23.0:
+The first number in the range of hosts (0 in this case)
+represents the network and cannot be used by a host.
+
+104.96.23.255:
+The last number in the range of hosts (255 in this case)
+represents the broadcast address.
+
+104.96.23.12:
+This address is already used by the host Client B.
+*/
+# **************************************************************************** #
+Goal 2)
+host 'my Mac' needs to communicate with host 'my little sister's computer'
+
+host A: my Mac
+interface C1)
+	IP:		211.191.210.75
+	MASK:	255.255.255.0
+
+host B: my little sister's computer
+interface D1)
+	IP:		?(1)
+	MASK:	255.255.255.0
+
+/*
+(1)
+The same reasoning as goal 1,
+however the subnet mask is 255.255.0.0 in this case.
+The first 2 bytes of the IP address will represent the network;
+and the last 2 bytes, the host address.
+
+The solution will be anything in the range of
+211.191.0.0 - 211.191.255.255,
+excluding:
+
+211.191.0.0:
+Represents the network address.
+
+211.191.255.255:
+Represents the broadcast address.
+
+211.191.89.75:
+Already taken by host Client C.
+*/
+
+# **************************************************************************** #
+lvl2
+# **************************************************************************** #
+Goal 1)
+host 'Computer B' needs to communicate with host 'Computer A'
+
+host A: computer A
+interface A1)
+	IP:		?(2)
+	MASK:	255.255.255.224
+
+host B: computer B
+interface B1)
+	IP:		192.168.73.222
+	MASK:	?(1)
+
+/*
+(1)
+Since Client B is on the same private network as Client A,
+they should have the exact same subnet mask.
+The solution can only be 255.255.255.224.
+//
+(2)
+To understand the subnet mask of 255.255.255.224,
+let's look at it in binary form,
+along with the IP 192.168.20.222 of Client B:
+
+	MASK:	11111111.11111111.11111111.11100000
+	IP:		11000000.10101000.00010100.11011101
+
+As we can see, the first 27 bits represent the IP address,
+while only the last 5 bits represent the host address.
+
+All these 27 bits representing the network
+must stay the same in the IP addresses of hosts on the same network.
+
+To get the answer, we can only change the last 5 bits.
+
+The answer is in the range of
+Binary:
+11000000.10101000.00010100.11000000 - 11000000.10101000.00010100.11011111
+
+Decimal:
+192.168.20.192 - 192.168.20.223,
+Excluding:
+
+11000000.10101000.00010100.11000000:
+Represents the network address (notice all 0 in the last 5 bits).
+
+11000000.10101000.00010100.11011111:
+Represents the broadcast address (notice all 1 in the last 5 bits).
+
+11000000.10101000.00010100.11011110:
+Client B already has that address.
+*/
+
+# **************************************************************************** #
+Goal 2)
+host 'Computer D' needs to communicate with host 'Computer C'
+
+host C: computer C
+interface C1)
+	IP:		?()
+	MASK:	255.255.255.252
+
+host D: computer D
+interface D1)
+	IP:		?()
+	MASK:	/30
+
+/*
+Here we are introduced the slash "/" notation
+for the subnet mask on Interface D1.
+A subnet mask of /30 means that
+the first 30 bits of the IP address represent the network address,
+and the remaining 2 bits represent the host address:
+
+Mask /30:	11111111.11111111.11111111.11111100
+
+This binary number corresponds to the decimal 255.255.255.252,
+therefore it is identical to the mask found on Interface C1.
+
+The answers can then be any address,
+as long as they meet the following conditions:
+
+The network address (first 30 bits) must be identical for Client D and Client C.
+The host bits (last 2 bits) cannot be all 1, nor all 0.
+Client D and Client C do not have identical IP addresses.
+*/
+# **************************************************************************** #
+lvl3
+# **************************************************************************** #
+goals
+host Host A needs to communicate with host Host B
+host Host A needs to communicate with host Host C
+host Host B needs to communicate with host Host C
+
+*all linked through a 'switch'
+
+A)
+	IP:		104.198.140.125
+	MASK:	?(1)
+
+B)
+	IP:		?(2)
+	MASK:	?(1)
+
+C)
+	IP:		?(2)
+	MASK:	255.255.255.128
+
+/*
+This exercise introduces the use of the switch (Switch S in this example).
+The switch links multiple hosts of the same network together.
+
+(1)
+Client A, Client B, and Client C are all on the same network.
+Therefore, they must all have the same subnet mask.
+Since Client C already has the mask 255.255.255.128,
+the mask for Interface B1 and for Interface A1 will also be 255.255.255.128
+(or in slash notation: /25).
+
+(2)
+The IP address of Interface B1 and Interface C1 must be
+on the same network range as the IP of Client A.
+This range is:
+104.198.241.0 - 104.198.241.128
+Excluding of course the network address and the broadcast address
+*/
+
+# **************************************************************************** #
+lvl4
+# **************************************************************************** #
+goals
+host A nice host needs to communicate with host Another host
+host A nice host needs to communicate with host My_Gate
+host Another host needs to communicate with host My_Gate
+
+Hosts
+A1)  IP:     112.194.119.132 ->  01110000.11000010.01110111.10000100
+	MASK:	?
+
+B1)	IP:		?
+	MASK:	?
+
+Router
+R1)	IP:		?
+	MASK:	?
+
+*(these two interfaces are not needed)*
+
+R2) IP:     112.194.119.1   ->  01110000.11000010.01110111.00000001
+    MASK    255.255.255.128 ->  11111111.11111111.11111111.10000000
+
+R3) IP:     112.194.119.244 ->  01110000.11000010.01110111.11110100
+    MASK:   255.255.255.192 ->  11111111.11111111.11111111.11000000
+
+/*
+This exercise introduces the router.
+The router is used to link multiple networks together.
+It does so with the use of multiple interfaces
+(Interface R1, Interface R2, and Interface R3 in this example).
+
+Since none of the masks on
+Interface B1, Interface A1, and Interface R1 are entered,
+we are free to choose our own subnet mask.
+
+A mask of /24 is ideal
+as it leaves us with the entire 4th byte for the host address,
+and does not require binary calculations
+to find the range of possible host addresses.
+
+The IP address of Interface B1 and Interface R1
+must have the same network address as the IP address of Interface A1.
+With a subnet of /24, the possible range is:
+
+112.194.119.0 - 112.194.119.255
+(Excluding the network address and the broadcast address)
+
+Note that we did not interact with the router Interface R2 and Interface R3,
+since none of our communications had to reach these sides of the router.
+*/
+
+# **************************************************************************** #
+lvl5
+# **************************************************************************** #
+Goals
+host Machine A needs to communicate with host The Mighty Router
+host Machine B needs to communicate with host The Mighty Router
+host Machine A needs to communicate with host Machine B
+
+
+Hosts
+A1)
+	IP:		?
+	MASK:	?
+	Routes:	?	=>	?
+
+B1)
+	IP:		?
+	MASK:	?
+	Routes:	default	=>	?
+
+Router R
+R1)
+	IP:		86.64.190.126	->	01010110.01000000.10111110.01111111
+	MASK:	255.255.255.128	->	11111111.11111111.11111111.01000000
+
+R2)
+	IP:		143.140.241.254	->	10001111.10001100.10000001.11111100	
+	MASK:	255.255.192.0	->	11111111.11111111.11000000.0
+
+
+/*
+This level introduces routes.
+A route contains 2 fields,
+the first one is the destination of outbound packets,
+the second one is the next hop of the packets.
+
+The destination default is equivalent to 0.0.0.0/0,
+which will send the packets indiscriminately
+to the first network address it encounters.
+A destination address of 122.3.5.3/24 would send the packets
+to the network 122.3.5.0.
+
+
+The **next hop** is the IP address
+of the next router (or internet) interface
+to which the interface of the current machine
+must send its packets.
+
+1.
+Client A only has 1 route through which it can send its packets.
+There is no use specifying a numbered destination.
+The destination default will send the packets to the only path available.
+
+The next hop address must be
+the IP address of the next router's interface on the packets' way.
+The next interface is Interface R1,
+
+with the IP address of 
+
+Note that the next interface is not Interface A1,
+since this is the sender's own interface.
+*/
+
+
+
+# **************************************************************************** #
+# **************************************************************************** #

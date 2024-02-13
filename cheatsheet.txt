@@ -1,0 +1,11 @@
+
+using 'bc' in terminal,
+
+to change input base:
+    ibase=2 (to input binary)
+
+to change output base:
+    obase=2 (to output binary)
+
+*(use this to convert decimal and binary values)
+
