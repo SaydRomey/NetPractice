@@ -202,8 +202,11 @@ the mask for Interface B1 and for Interface A1 will also be 255.255.255.128
 The IP address of Interface B1 and Interface C1 must be
 on the same network range as the IP of Client A.
 This range is:
-104.198.241.0 - 104.198.241.128
-Excluding of course the network address and the broadcast address
+104.198.140.0 - 104.198.140.127
+Excluding
+the network address :	104.198.140.0
+the broadcast address	104.198.140.127
+the address already taken by A1
 */
 
 # **************************************************************************** #
@@ -325,4 +328,49 @@ since this is the sender's own interface.
 
 
 # **************************************************************************** #
+lvl6
 # **************************************************************************** #
+
+Internet 1:
+
+next hop is already entered, the destination is the interface A1,
+with the mask from interface R2 as a CIDR slash notation
+
+# **************************************************************************** #
+lvl7
+# **************************************************************************** #
+needs 3 subnets, use the trick from the videos on subnetting:
+
+128	64	32	13	8	4	2	1 -> additional bits we must use for mask
+
+256	128	64	32	16	8	4	2 -> subnetworks we need
+
+for 3 networks, (4 on the second line, as 2 is too small),
+we will need 2 host bits
+
+[      network bits      ][host bits]
+11111111.11111111.11111111.00000000
+
+(equivalent to 255.255.255.0)
+
+now to create 3 networks, we use 2 bits, so the subnet mask (in binary) becomes:
+
+11111111.11111111.11111111.11000000
+
+(equivalent to 255.255.255.192) -> a "/26" network
+
+then find how many hosts in each network (find the increment) *!!
+
+It is the value of the last network bit we have set to 1 (currently 64)
+
+used to determine the size of the subnetworks and the ranges for each subnetworks
+
+the IP we have are
+
+interface R11 : 99.198.14.1
+
+interface R12 : 99.198.14.254
+
+Mask : 11111111.11111111.11111111.
+R 11 : 00110011.11000110.00001110.00000001
+R 12 : 00110011.11000110.00001110.11111110

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 15:17:48 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/13 12:36:41 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/14 16:02:21 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,21 @@ update:
 		echo "canceling update..."; \
 	fi
 # **************************************************************************** #
+
+# **************************************************************************** #
+OPEN		:=
+OPEN_URL	:=
+BROWSER		:= Google Chrome
+
+ifeq ($(OS),Darwin)
+	OPEN := open
+	OPEN_URL := open -a "$(BROWSER)"
+else
+	OPEN := xdg-open
+	OPEN_URL := xdg-open
+endif
+
+# **************************************************************************** #
 # ---------------------------------- PDF ------------------------------------- #
 # **************************************************************************** #
 PDF		:= net_practice.pdf
@@ -59,20 +74,16 @@ PDF_URL = $(GIT_URL)/blob/main/pdf/$(PDF)?raw=true
 
 pdf: | $(TMP_DIR)
 	@curl -# -L $(PDF_URL) -o $(TMP_DIR)/$(PDF)
-ifeq ($(OS),Darwin)
-	@open $(TMP_DIR)/$(PDF)
-else
-	@xdg-open $(TMP_DIR)/$(PDF)
-endif
+	@echo "Opening instruction pdf $(TMP_DIR)/$(PDF)"
+	@$(OPEN) $(TMP_DIR)/$(PDF)
+
 # **************************************************************************** #
 # ---------------------------------- NET ------------------------------------- #
 # **************************************************************************** #
-# TODO:add a choose case for level choice
-
 TRAIN		:= net_practice.1.5.tgz
 TRAIN_URL	:= $(GIT_URL)/raw/main/downloads/$(TRAIN)
 PORT		:= 8000
-URL			:= http://localhost:$(PORT)/net_practice/
+URL			:= http://localhost:$(PORT)/net_practice/index.html
 
 net: | $(TMP_DIR)
 	@echo "Downloading and setting up training material..."
@@ -82,60 +93,50 @@ net: | $(TMP_DIR)
 	@echo "Starting local web server on port $(PORT)..."
 	@cd $(TMP_DIR) && python3 -m http.server $(PORT) &
 	@sleep 2 # Wait for the server to start
-	@echo "Opening in Google Chrome..."
-	@echo "(wip) To change level, do it manually in the url.. for now..."
-ifeq ($(OS),Darwin)
-	@open -a "Google Chrome" $(URL)
-else
-	@xdg-open $(URL)
-endif
+	@echo "Opening in $(BROWSER)..."
+	@$(OPEN_URL) $(URL)
 # **************************************************************************** #
-# ---------------------------------- REF ------------------------------------- #
+# --------------------------- LEARNING MATERIAL ------------------------------ #
 # **************************************************************************** #
-REF_URL1	:=	https://github.com/lpaube/NetPractice #has explained answers
-REF_URL2	:=	https://github.com/DeRuina/NetPractice #has cheetsheets
-REF_URL3	:=	https://medium.com/@imyzf/netpractice-2d2b39b6cf0a
+REF_URL1	:=	https://github.com/lpaube/NetPractice
+REF_URL2	:=	https://github.com/iimyzf/NetPractice
+
+REF_URL3	:=	https://www.codequoi.com/en/internet-layered-network-architecture/
+REF_URL4	:=	https://www.codequoi.com/en/ipv4-addresses-routing-and-subnet-masks/
 
 ref:
-	@if [ "$(OS)" = "Darwin" ]; then \
-		open -a "Google Chrome" $(REF_URL1); \
-		open -a "Google Chrome" $(REF_URL2); \
-		open -a "Google Chrome" $(REF_URL3); \
-	else \
-		xdg-open $(REF_URL1); \
-		xdg-open $(REF_URL2); \
-		xdg-open $(REF_URL3); \
-	fi
+	@$(OPEN_URL) $(REF_URL1)
+	@$(OPEN_URL) $(REF_URL2)
+	@$(OPEN_URL) $(REF_URL3)
+	@$(OPEN_URL) $(REF_URL4)
 
-# **************************************************************************** #
-OPENER		:=
+
 VIDEO_URL	:=	https://www.youtube.com/watch?v=5WfiTHiU4x8&list=WL&index=1&t=1s
-
-ifeq ($(OS),Darwin)
-	OPENER := open -a "Google Chrome"
-else
-	OPENER := xdg-open
-endif
 
 video:
 	@echo "Launching Youtube tutorial on Subnetting"
-	@$(OPENER) $(VIDEO_URL)
+	@$(OPEN_URL) $(VIDEO_URL)
 
+# **************************************************************************** #
 # **************************************************************************** #
 man:
 	@echo "$$man"
 
 define man
 
-'make ref' \t-> Open $(NAME) tutorials from $(UNDERLINE)(...)$(RESET)
-'make video' \t-> Open youtube tutorial on subnetting by $(UNDERLINE)NetworkChuck$(RESET)
-'make net' \t-> Launch 42's $(BOLD)$(NAME)$(RESET)
-'make pdf' \t-> Get a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)
-'make update' \t-> Pull the github version"
-'make clean' \t-> Remove $(CYAN)$(TMP_DIR)$(RESET) folder
-(also works with fclean or ffclean)
+'make ref'    -> Open $(NAME) learning material from
 
-'make man' \t-> Show this message
+$(UNDERLINE)lpaube$(RESET)
+$(UNDERLINE)azabir$(RESET)
+$(UNDERLINE)mcombeau$(RESET)
+
+'make video'  -> Open youtube tutorial on subnetting by $(UNDERLINE)NetworkChuck$(RESET)
+
+'make net'    -> Launch 42's $(BOLD)$(NAME)$(RESET)
+'make pdf'    -> Get a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)
+'make update' -> Pull the github version"
+'make clean'  -> Remove $(CYAN)$(TMP_DIR)$(RESET) folder
+'make man'    -> Show this message
 
 endef
 
