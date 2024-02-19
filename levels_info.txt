@@ -360,17 +360,148 @@ now to create 3 networks, we use 2 bits, so the subnet mask (in binary) becomes:
 (equivalent to 255.255.255.192) -> a "/26" network
 
 then find how many hosts in each network (find the increment) *!!
-
 It is the value of the last network bit we have set to 1 (currently 64)
-
 used to determine the size of the subnetworks and the ranges for each subnetworks
 
-the IP we have are
+must be in the range but all host bits must not be only 0 or only 1
 
-interface R11 : 99.198.14.1
+# **************************************************************************** #
+lvl8
+# **************************************************************************** #
 
-interface R12 : 99.198.14.254
+255.255.255.240 or /28 network mask for everything
 
-Mask : 11111111.11111111.11111111.
-R 11 : 00110011.11000110.00001110.00000001
-R 12 : 00110011.11000110.00001110.11111110
+in a /24 network, the last available bit is worth 16
+so 16 is the increment..
+
+the next hop of the router R2 routing table is the IP of interface R13 of the router R1
+
+the host bits of each subnet must be in these ranges:
+
+0 - 15
+16 - 31
+32 - 47
+48 - 63
+64 - 79
+80 - 95
+96 - 111
+112 - 127
+128 - 143
+144 - 159
+160 - 175
+176 - 191
+192 - 207
+208 - 223
+224 - 239
+240 - 255
+
+*(set the IP of interface R21 in the same range as R13 that we already have),
+*(then use ?.?.?.1 and ?.?.?.2 for R23/D1),
+*(then use ?.?.?.17 and ?.?.?.18 for R22/C1)
+
+then setup the next hop of each forward tables
+
+For the routing table of router R1,
+the destination should be the network address of our network
+with the CIDR mask or the interface R12
+*(?.?.?.0/26) which will be the same as the default destination of the routing table of 'internet I'
+
+and the next hop of routing table for R1 should be the IP of the interface R21
+
+the next hop of 'internet I' should be the IP of interface R12
+
+# **************************************************************************** #
+lvl9
+# **************************************************************************** #
+Do it step by step for each goal..
+
+Goal 1;
+
+set the same mask as interface R11 for A1 and B1,
+then set the 3 first bits to something not in the reserved range like '42.42.42.?'
+using 1, 2 and 3 as the last bit will work..
+the next hop for routing tables of host B and host A are the IP of interface R11
+
+Goal 2;
+
+next hop of routing table of host D is the IP of interface R23
+set the mask of D1 to be the same as R23
+
+for R22 and C1, the mask can be /24
+and we can use another 3 bits like '43.43.43.?'
+then set the next hop of routing table of host C to the IP of R22
+
+Goal 3;
+
+set one of the destination of routing table internet I 
+to the network address of interface R11, A1 and B1
+with the CIDR mask of that network
+something like '42.42.42.0/24'
+
+Goal 4;
+
+set the mask of R13 to the same as R21
+then use another non-reserved 3 bits like '44.44.44.?' and use 254 and 253 for the last bit
+
+then set the next hop of R1 to the IP of R21
+and the next hop of R2 to the IP of R13
+
+Goal 5;
+(should already be ok if previous steps worked)
+
+Goal 6;
+
+set another field of routing table internet I
+to the network adress and CIDR mask of R22 and C1
+something like '43.43.43.0/24'
+
+# **************************************************************************** #
+lvl9
+# **************************************************************************** #
+
+there are 4 networks:
+
+router R1 to switch S1
+router R1 to router R2
+router R2 to host H4
+router R2 to host H3
+
+The internet must be able to send its packets to all the hosts,
+so its destination must cover the range of networks of all the hosts
+
+internet I routing table destination:
+network address of the other interfaces (not R12)
+with a CIDR mask of /24
+like '165.82.67.0/24'
+
+interface R11 and interface R13 already have an IP address entered.
+This IP address only differs in its last byte.
+
+R11 has for last byte 1, and R13 has for last byte 254.
+
+To cover this wide range to IP addresses,
+we take a mask of /24 for the internet's destination.
+
+
+When choosing the IP addresses, we must make sure of 2 things:
+
+The IP address is covered by the internet destination.
+The IP address range of the various networks does not overlap.
+
+With the IP addresses already entered (greyed out),
+we can examine the ranges covered by the various networks:
+
+Router R1 to Switch S1 - Covers the range ?.?.?.0 - ?.?.?.127 (mask /25).
+Router R2 to Client H4 - Covers the range ?.?.?.128 - ?.?.?.191 (mask /26).
+Router R1 to Router R2 - Covers the range ?.?.?.252 - ?.?.?.255 (mask /30).
+Router R2 to Client H3 - ??? (mask ???).
+
+The only IP addresses left for the network
+"Router R2 to Client H3" are ?.?.?.192 - ?.?.?.251.
+*(use ?.?.?.193 and ?.?.?.194)
+
+We can pick any mask that will let us take 2 IP addresses from that range
+to put in Interface R22 and Interface R31.
+*(like /25)
+
+

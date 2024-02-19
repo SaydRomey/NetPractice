@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 15:17:48 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/14 16:02:21 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/19 11:02:27 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,6 +95,11 @@ net: | $(TMP_DIR)
 	@sleep 2 # Wait for the server to start
 	@echo "Opening in $(BROWSER)..."
 	@$(OPEN_URL) $(URL)
+
+netpractice: | $(TMP_DIR)
+	@echo "Launching $(NAME) in $(BROWSER)"
+	@$(OPEN_URL) $(TMP_DIR)/net_practice/index.html
+
 # **************************************************************************** #
 # --------------------------- LEARNING MATERIAL ------------------------------ #
 # **************************************************************************** #
